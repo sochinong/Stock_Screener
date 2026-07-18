@@ -62,6 +62,7 @@ def _fetch_tables(url: str) -> list[pd.DataFrame]:
     """
     # requests.get()으로 페이지에 접속. headers=HEADERS를 같이 보내서
     # "저는 로봇이 아니라 브라우저예요"라고 소개함.
+    # response는 접속 결과를 담은 객체(object)야. 
     response = requests.get(url, headers=HEADERS)
 
     # 접속이 실패했으면(403, 404 등) 여기서 바로 에러를 내서 알려줌.
@@ -72,6 +73,7 @@ def _fetch_tables(url: str) -> list[pd.DataFrame]:
     # io.StringIO(...)는 이 글자 덩어리를 "파일인 척" 포장해주는 도구.
     # pd.read_html()은 원래 파일이나 인터넷 주소를 기대하는데,
     # 우리는 이미 받아온 내용을 넘겨줄 거라서 이렇게 포장해서 넘겨줘야 해.
+    # return은 함수를 호출한 곳으로 결과를 돌려주는 명령어야. 
     return pd.read_html(io.StringIO(response.text))
 
 
@@ -197,6 +199,7 @@ def get_nasdaq100() -> pd.DataFrame:
     df["ticker"] = df["ticker"].str.replace(".", "-", regex=False)
 
     # ticker, name 컬럼만 남기고 나머지(시가총액 등 지금 안 쓰는 컬럼)는 정리.
+    # copy를 붙이는 이유는 이후 코드에서 "df를 수정하면 원본도 같이 바뀌는" 부작용을 방지하기 위해서야.
     df = df[["ticker", "name"]].copy()
 
     print(f"나스닥100 섹터 정보를 yfinance로 조회합니다 (총 {len(df)}개, 시간이 좀 걸려요)...")
