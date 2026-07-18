@@ -1,0 +1,35 @@
+stock_screener/
+│
+├── config/
+│   └── settings.py          ← API 키, 종목 리스트 같은 "설정값" 보관함
+│
+├── data/                     ← 다운받은 데이터를 저장하는 창고
+│   ├── raw/                  ← 인터넷에서 막 받아온 날것의 데이터
+│   └── processed/            ← 깨끗하게 정리된 데이터
+│
+├── src/
+│   ├── collectors/            ← "데이터 모으는 사람들" 팀
+│   │   ├── price_collector.py     (yfinance로 가격/거래량 가져오기)
+│   │   ├── fundamental_collector.py (FMP로 재무제표 가져오기)
+│   │   └── edgar_collector.py     (SEC 원자료 검증, 필요할 때만)
+│   │
+│   ├── processors/            ← "데이터 정리하는 사람들" 팀
+│   │   ├── cleaner.py         (이상한 값, 빈 값 정리)
+│   │   └── merger.py          (가격 데이터 + 재무 데이터를 하나로 합치기)
+│   │
+│   ├── scoring/                ← "점수 매기는 사람들" 팀
+│   │   ├── valuation_score.py  (PER 점수)
+│   │   ├── profitability_score.py (ROE 점수)
+│   │   ├── growth_score.py     (매출성장률 점수)
+│   │   ├── volume_score.py     (거래량 점수)
+│   │   ├── pattern_score.py    (가격 패턴 점수)
+│   │   └── total_score.py      (다 합쳐서 최종 점수 계산)
+│   │
+│   └── universe.py            ← S&P500/나스닥100 "명단"을 관리하는 파일
+│
+├── dashboard/
+│   └── app.py                 ← streamlit로 만든 화면 (결과를 보여주는 창)
+│
+├── tests/                     ← 잘 작동하는지 확인하는 테스트 코드
+│
+└── main.py                    ← 전체를 순서대로 실행시키는 "지휘자"
